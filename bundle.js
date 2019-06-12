@@ -61,27 +61,27 @@ const generateCode = (entry) => {
     console.log(graph)
     return `
          //IIFE
-       (function(graph) {
-            //定义require函数，因为浏览器中没有require函数
-           function require(bundlePath) {
-                  debugger;
-                  // 定义localRequire
-                  // 因为模块内部的require使用的是相对与当前模块的路径,必须修改为相对于bundle.js的路径否则会找不到    
+      (function (graph) {
+         //定义require函数，因为浏览器中没有require函数
+         function require(bundlePath) {
+                 // 定义localRequire
+                 // 因为模块内部的require使用的是相对与当前模块的路径,必须修改为相对于bundle.js的路径否则会找不到    
                  function localRequire(modulePath) {
                     return require(graph[bundlePath].dependencies[modulePath])
-                 }   
-                 
-                 var exports = {};
-            
-                //防止模块内部的变量影响到外部，所以也需要设置一个IIFE
-                (function (require,transformedCode) {                
-                     eval(transformedCode)
-                })(localRequire,graph[bundlePath].transformedCode);
-                
-                return exports
-           }
-           require("${entry}")
-    })(${JSON.stringify(graph)}) //传入graph对象
+                 }
+
+                   var exports = {};
+
+                   //防止模块内部的变量影响到外部，所以也需要设置一个IIFE
+                   (function (require, transformedCode) {
+                       eval(transformedCode)
+                 })(localRequire, graph[bundlePath].transformedCode);
+    
+                   return exports
+              }
+
+                require("${entry}")
+            })(${JSON.stringify(graph)}) //传入graph对象
     `
 }
 
