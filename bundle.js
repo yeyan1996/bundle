@@ -15,7 +15,8 @@ const moduleAnalyser = function (bundlePath) {
     const dependencies = {}
     traverse(ast, {
         ImportDeclaration({node}) {
-            // 通过分析 AST 生成一个依赖关系(dependencies)的对象，属性是相对与模块的路径，值是相对于bundle.js的路径
+            /**通过递归遍历 bundle.js 的 AST 树，提取 bundle.js 以及它所有依赖模块的 import 语句**/
+            // 生成一个依赖关系(dependencies)的对象，属性是相对于当前模块的路径，值是相对于 bundle.js 的路径
             // 针对 windows 平台做了一些路径的格式化，mac 可能会出错
             dependencies[node.source.value] = "./" + path.join("./src/", node.source.value).split(path.sep).join("/")
         }
