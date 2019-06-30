@@ -13,6 +13,8 @@ const moduleAnalyser = function (bundlePath) {
     })
 
     const dependencies = {}
+    // 通过 traverse 可以遍历整个 AST 树，并且当遍历到特定的 AST 时会触发钩子回调
+    // 钩子包含 enter 和 exit 2种，当刚刚进入时会触发 enter，当回溯时会触发 exit 钩子（因为是树形结构）
     traverse(ast, {
         ImportDeclaration({node}) {
             //定义一个依赖关系的对象，属性是相对与模块的路径，值是相对于bundle.js的路径
